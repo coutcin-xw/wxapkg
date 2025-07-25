@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/wux1an/wxapkg/cmd"
+	"wxapkg/cmd"
 )
 
 var version = "v0.0.1"

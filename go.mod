@@ -1,4 +1,4 @@
-module github.com/wux1an/wxapkg
+module wxapkg
 
 go 1.19
 
@@ -6,6 +6,7 @@ require (
 	github.com/charmbracelet/bubbles v0.15.0
 	github.com/charmbracelet/bubbletea v0.24.1
 	github.com/charmbracelet/lipgloss v0.7.1
+	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c
 	github.com/fatih/color v1.15.0
 	github.com/spf13/cobra v1.7.0
 	github.com/tidwall/pretty v1.2.1
@@ -18,7 +19,6 @@ require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/charmbracelet/harmonica v0.2.0 // indirect
 	github.com/containerd/console v1.0.4-0.20230313162750-1ae8d489ac81 // indirect
-	github.com/ditashi/jsbeautifier-go v0.0.0-20141206144643-2520a8026a9c // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect

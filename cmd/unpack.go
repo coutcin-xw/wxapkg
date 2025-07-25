@@ -8,10 +8,6 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/fatih/color"
-	"github.com/spf13/cobra"
-	"github.com/wux1an/wxapkg/util"
-	"golang.org/x/crypto/pbkdf2"
 	"io"
 	"log"
 	"os"
@@ -19,6 +15,12 @@ import (
 	"regexp"
 	"sort"
 	"sync"
+
+	"wxapkg/util"
+
+	"github.com/fatih/color"
+	"github.com/spf13/cobra"
+	"golang.org/x/crypto/pbkdf2"
 )
 
 var programName = filepath.Base(os.Args[0])
@@ -27,6 +29,7 @@ var unpackCmd = &cobra.Command{
 	Short:   "Decrypt wechat mini program",
 	Example: "  " + programName + "unpack -o unpack -r \"D:\\WeChat Files\\Applet\\wx12345678901234\"",
 	Run: func(cmd *cobra.Command, args []string) {
+		isNew, _ := cmd.Flags().GetBool("isNew")
 		root, _ := cmd.Flags().GetString("root")
 		output, _ := cmd.Flags().GetString("output")
 		thread, _ := cmd.Flags().GetInt("thread")
@@ -48,7 +51,18 @@ var unpackCmd = &cobra.Command{
 			util.Fatal(err)
 
 			for _, file := range files {
-				var decryptedData = decryptFile(wxid, file)
+				var decryptedData []byte
+				if isNew {
+					var err error
+					decryptedData, err = os.ReadFile(file)
+					if err != nil {
+						log.Fatal(err)
+					}
+
+				} else {
+					decryptedData = decryptFile(wxid, file)
+				}
+
 				fileCount, err := unpack(decryptedData, subOutput, thread, !disableBeautify)
 				util.Fatal(err)
 				allFileCount += fileCount
@@ -264,7 +278,7 @@ func init() {
 
 	var homeDir, _ = os.UserHomeDir()
 	var defaultRoot = filepath.Join(homeDir, "Documents/WeChat Files/Applet", "wx00000000000000")
-
+	unpackCmd.Flags().BoolP("isNew", "i", false, "is WeChat 4.0 +")
 	unpackCmd.Flags().StringP("root", "r", "", "the mini progress path you want to decrypt, see: "+defaultRoot)
 	unpackCmd.Flags().StringP("output", "o", "unpack", "the output path to save result")
 	unpackCmd.Flags().IntP("thread", "n", 30, "the thread number")

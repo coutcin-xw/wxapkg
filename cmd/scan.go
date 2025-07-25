@@ -2,13 +2,15 @@ package cmd
 
 import (
 	"fmt"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/fatih/color"
-	"github.com/spf13/cobra"
-	"github.com/wux1an/wxapkg/util"
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
+	"wxapkg/util"
+
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/fatih/color"
+	"github.com/spf13/cobra"
 )
 
 var scanCmd = &cobra.Command{
@@ -16,7 +18,8 @@ var scanCmd = &cobra.Command{
 	Short:   "Scan the wechat mini program",
 	Example: "  " + programName + " scan -r \"D:\\WeChat Files\\Applet\\wx12345678901234\"",
 	Run: func(cmd *cobra.Command, args []string) {
-		root, err := cmd.Flags().GetString("root")
+		root, _ := cmd.Flags().GetString("root")
+		isNew, err := cmd.Flags().GetBool("isNew")
 		if err != nil {
 			color.Red("%v", err)
 			return
@@ -60,6 +63,7 @@ var scanCmd = &cobra.Command{
 		output := tui.selected.Wxid
 		_ = unpackCmd.Flags().Set("root", tui.selected.Location)
 		_ = unpackCmd.Flags().Set("output", output)
+		_ = unpackCmd.Flags().Set("isNew", strconv.FormatBool(isNew))
 		detailFilePath := filepath.Join(output, "detail.json")
 		unpackCmd.Run(unpackCmd, []string{"detailFilePath", detailFilePath})
 		_ = os.WriteFile(detailFilePath, []byte(tui.selected.Json()), 0600)
@@ -73,4 +77,5 @@ func init() {
 	var defaultRoot = filepath.Join(homeDir, "Documents/WeChat Files/Applet")
 
 	scanCmd.Flags().StringP("root", "r", defaultRoot, "the mini app path")
+	scanCmd.Flags().BoolP("isNew", "i", false, "is WeChat 4.0 +")
 }

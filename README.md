@@ -24,6 +24,15 @@
 
 如果想手动来解密指定小程序，可以使用 `wxapkg.exe unpack` 命令，需要指定小程序 wxapkg 文件路径，同时指定小程序的 `wxid`。如果没指定 `wxid`，会自动从路径中使用正则表达式匹配获取
 
+支持Wechat4.0.0  
+使用方法:
+![alt text](image.png)
+主要添加isNew参数来判断是否为新版本微信，新版本微信小程序存储路径为：
+```
+C:\Users\{用户名}\AppData\Roaming\Tencent\xwechat\radium\Applet\packages
+```
+使用方法为：
+`wxapkg.exe scan -r "C:\Users\{用户名}\AppData\Roaming\Tencent\xwechat\radium\Applet\packages" -i true`
 ## ⚒️ 安装
 
 下载最新的发布版本 [release](https://github.com/wux1an/wxapkg/releases/latest)，或者用下面的命令自己编译
